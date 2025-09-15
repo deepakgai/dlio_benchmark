@@ -28,6 +28,10 @@ class StorageFactory(object):
         if storage_type == StorageType.LOCAL_FS:
             return FileStorage(namespace, framework)
         elif storage_type == StorageType.S3:
-            return S3Storage(namespace, framework)
+            if framework == FrameworkType.PYTORCH:
+                return S3PytorchStorage(namespace, framework)
+            else:
+                return S3Storage(namespace, framework)
+            #return S3Storage(namespace, framework)
         else:
             raise Exception(str(ErrorCodes.EC1001))
