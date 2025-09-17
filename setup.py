@@ -26,6 +26,7 @@ x86_deps = [
     "torch>=2.2.0",
     "torchaudio",
     "torchvision",
+    "boto3",
 ]
 ppc_deps = [
     f"hydra-core @ git+https://github.com/facebookresearch/hydra.git@v{HYDRA_VERSION}#egg=hydra-core"
