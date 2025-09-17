@@ -15,8 +15,8 @@
    limitations under the License.
 """
 from dlio_benchmark.storage.file_storage import FileStorage
-from dlio_benchmark.storage.s3_storage import S3Storage
-from dlio_benchmark.common.enumerations import StorageType
+from dlio_benchmark.storage.s3_storage import S3Storage, S3PytorchStorage
+from dlio_benchmark.common.enumerations import StorageType, FrameworkType
 from dlio_benchmark.common.error_code import ErrorCodes
 
 class StorageFactory(object):

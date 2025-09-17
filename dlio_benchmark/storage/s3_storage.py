@@ -85,16 +85,21 @@ class S3PytorchStorage(DataStorage):
         params = {'Bucket': bucket_name}
         if prefix:
             params['Prefix'] = prefix
+
+        paginator = self.s3_client.get_paginator('list_objects_v2')
         paths = []
         try:
-            ## Need to implement pagination
-            response = self.s3_client.list_objects_v2(**params)
-
-            if 'Contents' in response:
-                for key in response['Contents']:
-                    paths.append(key['Key'][len(prefix)+1:])
-        except self.s3_client.exceptions.NoSuchBucket:
-            print(f"Bucket '{bucket_name}' does not exist.")
+            for page in paginator.paginate(**params):
+                for obj in page.get('Contents', []):
+                    key = obj['Key']
+                    trimmed_key = key[len(prefix)+1:] if prefix and key.startswith(prefix + '/') else key
+                    paths.append(trimmed_key)
+        except ClientError as e:
+            error_code = e.response['Error']['Code']
+            if error_code == 'NoSuchBucket':
+                print(f"Bucket '{bucket_name}' does not exist.")
+            else:
+                print(f"Unexpected S3 error: {e}")
 
         return paths
 

@@ -76,7 +76,10 @@ class ReaderFactory(object):
             else:
                 if _args.odirect == True:
                     from dlio_benchmark.reader.npz_reader_odirect import NPZReaderODIRECT
-                    return NPZReaderODIRECT(dataset_type, thread_index, epoch_number)         
+                    return NPZReaderODIRECT(dataset_type, thread_index, epoch_number)
+                elif _args.storage_type == StorageType.S3:
+                    from dlio_benchmark.reader.npz_s3_reader import NPZS3Reader
+                    return NPZS3Reader(dataset_type, thread_index, epch_number)
                 else:
                     from dlio_benchmark.reader.npz_reader import NPZReader
                     return NPZReader(dataset_type, thread_index, epoch_number)
