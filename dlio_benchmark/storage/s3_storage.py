@@ -22,10 +22,17 @@ from dlio_benchmark.common.enumerations import NamespaceType, MetadataType
 import os
 import boto3
 from botocore.exceptions import ClientError
+from dotenv import load_dotenv
 
 from dlio_benchmark.utils.utility import Profile
 
 dlp = Profile(MODULE_STORAGE)
+load_dotenv()
+
+custom_endpoint_url = "http://10.246.188.61:9020"
+aws_access_key_id = "1_gaikwd_accid"
+aws_secret_access_key = "n_WolOpIMnhjMI9eCRM34OTaL7Mu"
+region_name = "us-east-1"
 
 class S3PytorchStorage(DataStorage):
     """
@@ -37,7 +44,13 @@ class S3PytorchStorage(DataStorage):
     def __init__(self, namespace, framework=None):
         super().__init__(framework)
         self.namespace = Namespace(namespace, NamespaceType.FLAT)
-        self.s3_client =  boto3.client('s3')
+        self.s3_client = boto3.client(
+                        's3',
+                        endpoint_url=custom_endpoint_url,
+                        aws_access_key_id=aws_access_key_id,
+                        aws_secret_access_key=aws_secret_access_key,
+                        region_name=region_name
+                    )
 
 
     @dlp.log
